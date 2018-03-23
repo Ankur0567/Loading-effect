@@ -12,6 +12,11 @@
 1) `Output_k.csv`, which includes k value for every tape advance
 2) `Output_corrected_data.csv`, which includes corrected BC data
 
+## 3. Bin all data grouped by tape advance
+
+please run `Avg_all_spots.py`, you will get BC vs ATN in a csv file, 
+then calculate the k with linear regression simply in Excel
+
 ### Note
 
 This programm is based on bin algorithm correcting BC loading data (Park et al., 2010). 
