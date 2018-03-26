@@ -2,15 +2,15 @@ import pandas as pd
 import numpy as np
 from sklearn import linear_model
 from scipy.interpolate import UnivariateSpline
-from operator import itemgetter
-from itertools import groupby
 
 ################################## INPUT #########################################
 # No. of spots need to be binned and calculate k
-Spots = 8
+Spots = 10
 # No. of bin, the more the bins, the smaller the binned ATN unit
 bin_number = 60
 # Rawdata file, following the format in the provided template "Rawdata.xlsx"
+print 'Spots is %d, %d bins.' % (Spots, bin_number)
+print ' Processing...'
 xl_file = pd.ExcelFile("Rawdata.xlsx")
 
 ################################## Main Function ##################################
@@ -20,7 +20,6 @@ df.dropna()
 ### identify tape advance by Null data
 null_value = df.ATN1.isnull()
 gb = df.dropna().groupby(null_value.cumsum())
-
 #//////////////////////////Get K value/////////////////////////////#
 R_array = []
 k_array = []
@@ -53,25 +52,21 @@ for i in xrange(1, channels + 1):
         x = data[['ATN' + str(i)]].values
         y = data['BC' + str(i)].values
 
+
         y_spl = UnivariateSpline(x, y, s=0, k=4)
         x_range = np.linspace(x[0], x[-1], len(x))
 
         y_spl_2d = y_spl.derivative(n=2)
         abs_y_2d = abs(y_spl_2d(x_range))
 
-        idx = np.where(abs_y_2d < np.nanpercentile(abs_y_2d,95))
+        idx = np.where(abs_y_2d > np.nanpercentile(abs_y_2d,90))
+        x = np.delete(x, idx, 0)
+        y = np.delete(y,idx,0)
 
-        idx_group = []
-        for p, g in groupby(enumerate(idx[0]), lambda (i, x): i - x):
-            idx_group.append(map(itemgetter(1), g))
-        idx_longest = max(idx_group, key=len)
-
-        idx_0 = idx_longest[0]
-        idx_end = idx_longest[-1]
 
         reg = linear_model.LinearRegression()
-        reg.fit(x[idx_0:idx_end], y[idx_0:idx_end])
-        R_square = reg.score(x[idx_0:idx_end], y[idx_0:idx_end])
+        reg.fit(x, y)
+        R_square = reg.score(x, y)
         slope = reg.coef_[0]
         intercept = reg.intercept_
         k_value = -slope / intercept
