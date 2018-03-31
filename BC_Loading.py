@@ -5,7 +5,7 @@ from scipy.interpolate import UnivariateSpline
 
 ################################## INPUT #########################################
 # No. of spots need to be binned and calculate k
-Spots = 10
+Spots = 30
 # No. of bin, the more the bins, the smaller the binned ATN unit
 bin_number = 60
 # Rawdata file, following the format in the provided template "Rawdata.xlsx"
@@ -100,7 +100,7 @@ for i in xrange(1,channels+1):
     m=0
     for key, item in gb:
         spot= gb.get_group(key)
-        BC_corr = (1+spot['ATN'+str(i)]*k_array[i-1][m])*spot['BC'+str(i)]
+        BC_corr = spot['BC'+str(i)]/(1-spot['ATN'+str(i)]*k_array[i-1][m])
         m=m+1
         BC_corrected.append(BC_corr)
     df = pd.concat(BC_corrected).to_frame()
