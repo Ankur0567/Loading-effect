@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 from sklearn import linear_model
 from scipy.interpolate import UnivariateSpline
-
+import time
 ################################## INPUT #########################################
 # No. of spots need to be binned and calculate k
-Spots = 30
+Spots = 15
 # No. of bin, the more the bins, the smaller the binned ATN unit
 bin_number = 60
 # Rawdata file, following the format in the provided template "Rawdata.xlsx"
@@ -30,7 +30,7 @@ for i in xrange(1, channels + 1):
     bin_time = []
     for key, item in gb:
         spot = gb.get_group(key)
-        bins = np.linspace(0, spot['ATN' + str(i)].max(), bin_number)
+        bins = np.linspace(0, df['ATN' + str(i)].max(), bin_number)
         groups = spot.groupby(np.digitize(spot['ATN' + str(i)], bins))
         binned_group.append(groups.mean())
         bin_time.append(spot['Datetime'].iloc[0])
@@ -91,22 +91,31 @@ R_df.columns = column_R
 k_df = pd.DataFrame(k_array.T)
 k_df.columns = column_k
 tape_advance_data = pd.concat([binTime_df, k_df, R_df], axis=1)
-tape_advance_data.to_csv('Output_k.csv', index=False)
+tape_advance_data.to_csv('Output_moving k.csv', index=False)
 
 #////////////////////////////Correct Raw BC data////////////////////////////#
 BC=[]
+BC_rawdata = []
 for i in xrange(1,channels+1):
     BC_corrected = []
+    BC_nc = []
     m=0
     for key, item in gb:
         spot= gb.get_group(key)
+        BC_raw = spot['BC' + str(i)]
         BC_corr = spot['BC'+str(i)]/(1-spot['ATN'+str(i)]*k_array[i-1][m])
         m=m+1
         BC_corrected.append(BC_corr)
+        BC_nc.append(BC_raw)
     df = pd.concat(BC_corrected).to_frame()
-    df.columns = ['BC'+str(i)]
+    df.columns = ['corrected_BC'+str(i)]
     BC.append(df)
+    r_df = pd.concat(BC_nc).to_frame()
+    r_df.columns = ['raw_BC' + str(i)]
+    BC_rawdata.append(r_df)
 corrected_BC = pd.concat(BC,axis = 1)
-corrected_data = pd.concat((Datetime,corrected_BC),axis=1)
-corrected_data.to_csv('Output_corrected_data.csv',index = False)
+raw_BC = pd.concat(BC_rawdata,axis = 1)
+corrected_data = pd.concat((Datetime,raw_BC,corrected_BC),axis=1)
+corrected_data.to_csv('Output_corrected_data_moving k.csv',index = False)
 print 'Correction finished, check the output CSV file'
+time.sleep(5)
