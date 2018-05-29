@@ -9,7 +9,7 @@
 
 ## 2. Output
 1) For bin method, `Bin_k.csv` includes k value for every tape advance, `Bin_corrected_data.csv` includes corrected BC data
-2) For gap method, `Gap_k.csv` includes k value for every tape advance, `Gap_corrected_data.csv` includes corrected BC data 
+2) For gap method, `Gap_k.csv` includes k value for every tape advance, `Gap_corrected_data.csv` includes corrected BC data
 
 ### Note
 
