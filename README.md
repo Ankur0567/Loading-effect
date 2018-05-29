@@ -22,4 +22,5 @@
  The bin method is based on research by Park et al. (2010), the gap method is based on study by Virkkula et al. (2007)
 
 >Park, S.S., A.D.A. Hansen and S.Y. Cho, Measurement of real time black carbon for investigating spot loading effects of Aethalometer data. Atmospheric Environment, 2010. 44(11): p. 1449-1455.
+
 >Virkkula, A., et al., A Simple Procedure for Correcting Loading Effects of Aethalometer Data. Journal of the Air & Waste Management Association, 2007. 57(10): p. 1214-1222.
