@@ -2,21 +2,24 @@
 
 ## 1. Input
 
-1) No. of spots need to be binned and calculate k `Spots = 5`
-2) No. of bin, the more the bins, the smaller the binned ATN unit. `bin_number = 30`
-3) Rawdata excel file, following the format in the provided template "`Rawdata.xlsx`"
+1) No. of spots need to be binned and calculate k 
+2) No. of bin, the more the bins, the smaller the binned ATN unit.`
+3) rawdata excel file, following the format in the provided template "`template.xlsx`"
 
 
 ## 2. Output
-
-1) `Output_k.csv`, which includes k value for every tape advance
-2) `Output_corrected_data.csv`, which includes corrected BC data
+1) For bin method, `Bin_k.csv` includes k value for every tape advance, `Bin_corrected_data.csv` includes corrected BC data
+2) For gap method, `Gap_k.csv` includes k value for every tape advance, `Gap_corrected_data.csv` includes corrected BC data 
 
 ### Note
 
- If you want to bin all data grouped by tape advance to calculate one k for all, please run `Avg_all_spots.py`, you will get BC vs ATN in a csv file, then calculate the k with linear regression simply in Excel.
+ If the input number of spots is greater than or equal the maximum spots (tape advance), there will be one filter parameter k for BC at each wavelength. 
+ And you will get the binned BC vs ATN in `Bin_k.csv`.
  
  
- This programm is based on bin algorithm correcting BC loading data (Park et al., 2010). 
+## Reference
+ 
+ The bin method is based on research by Park et al. (2010), the gap method is based on study by Virkkula et al. (2007)
 
 >Park, S.S., A.D.A. Hansen and S.Y. Cho, Measurement of real time black carbon for investigating spot loading effects of Aethalometer data. Atmospheric Environment, 2010. 44(11): p. 1449-1455.
+>Virkkula, A., et al., A Simple Procedure for Correcting Loading Effects of Aethalometer Data. Journal of the Air & Waste Management Association, 2007. 57(10): p. 1214-1222.
